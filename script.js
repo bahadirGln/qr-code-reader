@@ -1,16 +1,36 @@
-let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+document.addEventListener("DOMContentLoaded", function () {
+    const video = document.getElementById("preview");
+    const startScanBtn = document.getElementById("start-scan");
+    const qrResult = document.getElementById("qr-result");
+    const qrHistoryList = document.getElementById("qr-history");
 
-scanner.addListener('scan', function (content) {
-    document.getElementById('qr-result').innerText = "QR Kodu: " + content;
-    alert("QR Kodu Okundu: " + content);
-});
+    let scanner = new QrScanner(video, result => {
+        qrResult.innerText = "QR Kodu: " + result;
+        saveToHistory(result);
+        scanner.stop(); // QR kod okunduktan sonra kamerayı kapat
+    });
 
-Instascan.Camera.getCameras().then(function (cameras) {
-    if (cameras.length > 0) {
-        scanner.start(cameras[0]);  // İlk bulunan kamerayı kullan
-    } else {
-        alert("Kamera bulunamadı.");
+    startScanBtn.addEventListener("click", () => {
+        video.style.display = "block";
+        scanner.start();
+    });
+
+    function saveToHistory(qrText) {
+        let history = JSON.parse(localStorage.getItem("qrHistory")) || [];
+        history.push(qrText);
+        localStorage.setItem("qrHistory", JSON.stringify(history));
+        loadHistory();
     }
-}).catch(function (e) {
-    console.error(e);
+
+    function loadHistory() {
+        qrHistoryList.innerHTML = "";
+        let history = JSON.parse(localStorage.getItem("qrHistory")) || [];
+        history.forEach(item => {
+            let li = document.createElement("li");
+            li.textContent = item;
+            qrHistoryList.appendChild(li);
+        });
+    }
+
+    loadHistory();
 });
