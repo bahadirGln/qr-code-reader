@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const qrHistoryList = document.getElementById("qr-history");
 
     let scanner = new QrScanner(video, result => {
-        qrResult.innerText = "QR Kodu: " + result;
+        qrResult.innerText = "QR Code: " + result;
         saveToHistory(result);
-        scanner.stop(); // QR kod okunduktan sonra kamerayı kapat
+        scanner.stop(); // Stop scanner after scanning
     });
 
     startScanBtn.addEventListener("click", () => {
@@ -34,3 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadHistory();
 });
+
+// Register Service Worker
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js")
+    .then(() => console.log("Service Worker registered successfully"))
+    .catch((error) => console.log("Error registering Service Worker:", error));
+}

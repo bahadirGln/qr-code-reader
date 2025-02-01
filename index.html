@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Kod Okuyucu</title>
+    <title>QR Code Scanner</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-    <h1>QR Kod Okuyucu</h1>
+    <h1>QR Code Scanner</h1>
 
-    <button id="start-scan">QR Kod Tara</button>
+    <button id="start-scan">Scan QR Code</button>
     <video id="preview" style="display: none;"></video>
-    <p id="qr-result">QR Kodu Okutunuz...</p>
+    <p id="qr-result">Scan a QR Code...</p>
 
-    <h2>Taranan QR Kodlar</h2>
+    <h2>Scanned QR Codes</h2>
     <ul id="qr-history"></ul>
 
     <script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner.min.js"></script>
