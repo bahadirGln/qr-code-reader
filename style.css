@@ -1,4 +1,17 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    margin: 20px;
+}
+
+video {
+    width: 300px;
+    height: auto;
+    border: 2px solid black;
+    margin-top: 20px;
+}
+
+p {
+    font-size: 18px;
+    font-weight: bold;
 }
