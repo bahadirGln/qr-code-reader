@@ -5,14 +5,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     const qrHistoryList = document.getElementById("qr-history");
     const overlay = document.getElementById("qr-overlay");
 
-    // Offline Warning Message
+    //Offline Warning Message
     const offlineMessage = document.createElement("div");
     offlineMessage.id = "offline-message";
     offlineMessage.innerText = "⚠️ You are offline. Some features may not work.";
     offlineMessage.style.cssText = "position: fixed; top: 0; width: 100%; background: red; color: white; padding: 10px; text-align: center; display: none;";
     document.body.appendChild(offlineMessage);
 
-    // Detect Offline Mode
+    //Detect Offline Mode
     window.addEventListener("offline", () => {
         offlineMessage.style.display = "block";
     });
@@ -21,21 +21,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         offlineMessage.style.display = "none";
     });
 
-    // Ensure QrScanner is loaded
+    //Ensure QrScanner is loaded
     if (typeof QrScanner === "undefined") {
         console.error("QrScanner failed to load! Make sure 'qr-scanner.min.js' is included.");
         return;
     }
 
-    console.log("QrScanner loaded successfully:", QrScanner); 
+    console.log("✅ QrScanner loaded successfully:", QrScanner);
 
     let scanner = new QrScanner(video, async result => {
-        qrResult.innerText = "QR Code: " + result;
-        saveToHistory(result);
+        qrResult.innerText = "✅ QR Code: " + result;
+        await saveQRCode(result); //QR kodu IndexedDB'ye kaydet
         scanner.stop();
         overlay.style.display = "none";
 
-        // 📌 Send scanned QR code to API (optional)
+        //Send scanned QR code to API (optional)
         try {
             const response = await fetch("https://your-api.com/scan", {
                 method: "POST",
@@ -44,32 +44,59 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
 
             if (response.ok) {
-                console.log("QR Code sent to API successfully!");
+                console.log("✅ QR Code sent to API successfully!");
             } else {
-                console.error("Failed to send QR Code to API.");
+                console.error("❌ Failed to send QR Code to API.");
             }
         } catch (error) {
-            console.error("API request error:", error);
+            console.error("❌ API request error:", error);
         }
     });
 
     startScanBtn.addEventListener("click", async () => {
         video.style.display = "block";
         overlay.style.display = "block";
-        
+
         try {
             await scanner.start();
         } catch (error) {
-            console.error("Camera error:", error);
+            console.error("❌ Camera error:", error);
             alert("Failed to access the camera. Please allow camera permissions.");
         }
     });
 
-    function saveToHistory(qrText) {
-        let history = JSON.parse(localStorage.getItem("qrHistory")) || [];
-        history.push(qrText);
-        localStorage.setItem("qrHistory", JSON.stringify(history));
-        loadHistory();
+    //IndexedDB: Save QR Code
+    async function saveQRCode(qrText) {
+        if (!window.indexedDB) {
+            console.error("❌ IndexedDB is not supported in this browser.");
+            return;
+        }
+
+        const request = indexedDB.open("QRCodeDB", 1);
+
+        request.onupgradeneeded = function (event) {
+            let db = event.target.result;
+            if (!db.objectStoreNames.contains("qrCodes")) {
+                db.createObjectStore("qrCodes", { keyPath: "id", autoIncrement: true });
+            }
+        };
+
+        request.onsuccess = function (event) {
+            let db = event.target.result;
+            let transaction = db.transaction(["qrCodes"], "readwrite");
+            let store = transaction.objectStore("qrCodes");
+
+            let qrEntry = {
+                text: qrText,
+                date: new Date().toLocaleString()
+            };
+
+            store.add(qrEntry);
+        };
+
+        request.onerror = function () {
+            console.error("❌ Error opening IndexedDB.");
+        };
     }
 
     function loadHistory() {
@@ -84,20 +111,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     loadHistory();
 
-    // Register Service Worker
+    //Register Service Worker
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/service-worker.js")
-        .then(() => console.log("Service Worker registered successfully"))
-        .catch((error) => console.log("Error registering Service Worker:", error));
+        .then(() => console.log("✅ Service Worker registered successfully"))
+        .catch((error) => console.log("❌ Error registering Service Worker:", error));
     }
 
-    // 📌 Request Push Notification Permission
+    //Request Push Notification Permission
     if ("Notification" in window) {
         Notification.requestPermission().then(permission => {
             if (permission === "granted") {
-                console.log("Push notifications are enabled.");
+                console.log("✅ Push notifications are enabled.");
             } else {
-                console.warn("Push notifications are disabled.");
+                console.warn("❌ Push notifications are disabled.");
             }
         });
     }
