@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="QR Code Scan History">
+    <title>QR Code History</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+    <h1>QR Code Scan History</h1>
+
+    <button onclick="window.location.href='index.html'">Home</button>
+    <button onclick="window.location.href='scan.html'">Scan QR Code</button>
+
+    <h2>Scanned QR Codes</h2>
+    <ul id="qr-history"></ul>
+
+    <button id="clear-history">Clear History</button>
+
+    <script src="history.js"></script>
+
+</body>
+</html>

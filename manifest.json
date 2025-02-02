@@ -1,21 +1,42 @@
 {
     "name": "QR Code Scanner",
     "short_name": "QR Scanner",
-    "description": "A browser-based QR Code Scanner",
-    "start_url": "/index.html",
+    "description": "A fast and lightweight browser-based QR Code Scanner",
+    "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#000000",
+    "scope": "/",
+    "background_color": "#f9f9f9",
+    "theme_color": "#007BFF",
     "icons": [
         {
-            "src": "/icon.png",
+            "src": "assets/icon-192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/icon.png",
+            "src": "assets/icon-512.png",
             "sizes": "512x512",
             "type": "image/png"
+        },
+        {
+            "src": "assets/icon-1024.png",
+            "sizes": "1024x1024",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "assets/screenshot1.png",
+            "sizes": "1080x1920",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
+            "src": "assets/screenshot2.png",
+            "sizes": "1080x1920",
+            "type": "image/png",
+            "form_factor": "wide"
         }
     ]
 }

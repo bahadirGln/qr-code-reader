@@ -3,22 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fast and lightweight QR Code Scanner that works offline. Scan and save QR codes easily!">
     <title>QR Code Scanner</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
 </head>
 <body>
 
     <h1>QR Code Scanner</h1>
 
-    <button id="start-scan">Scan QR Code</button>
-    <video id="preview" style="display: none;"></video>
+    <nav>
+        <button onclick="window.location.href='scan.html'" aria-label="Go to QR scan page">Scan QR Code</button>
+        <button onclick="window.location.href='history.html'" aria-label="Go to QR scan history">View History</button> 
+    </nav>
+
+    <!-- QR Code Scanner -->
+    <div id="scanner-container">
+        <video id="preview" style="display: none;"></video>
+        <div id="qr-overlay" class="overlay"></div> <!-- Overlay for scanning -->
+    </div>
+    
     <p id="qr-result">Scan a QR Code...</p>
 
     <h2>Scanned QR Codes</h2>
     <ul id="qr-history"></ul>
 
-    <script src="https://unpkg.com/qr-scanner@1.4.2/qr-scanner.min.js"></script>
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log("Service Worker registered successfully"))
+                .catch(error => console.error("Service Worker registration failed:", error));
+        }
+    </script>
+
+    <!-- Scripts -->
+    <script src="qr-scanner.min.js"></script>
     <script src="script.js"></script>
 
 </body>
