@@ -16,8 +16,3 @@ A **fast and lightweight** browser-based **QR Code Scanner** that works **offlin
 - **IndexedDB** for data storage.
 - **Service Workers** for offline support.
 - **Manifest.json** for PWA features.
-
-## 📥 Installation & Usage
-1. **Clone the repository**:
-   ```sh
-   git clone https://github.com/bahadirGln/qr-code-reader.git
